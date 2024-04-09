@@ -28,6 +28,12 @@ button {
   border: none;
   font-size: 16px;
   font-family: "Montserrat", sans-serif;
+
+  transition: 0.2s ease;
+}
+
+button:hover {
+  background-color: #6C8CFF;
 }
 
 .timer {
