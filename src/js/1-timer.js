@@ -1,6 +1,9 @@
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 
+import iziToast from 'izitoast';
+import 'izitoast/dist/css/iziToast.min.css';
+
 let userSelectedDate = new Date();
 
 const startBtn = document.querySelector('[data-start]');
@@ -10,6 +13,8 @@ const hoursTimer = document.querySelector('[data-hours]');
 const minutesTimer = document.querySelector('[data-minutes]');
 const secondsTimer = document.querySelector('[data-seconds]');
 
+startBtn.disabled = true;
+
 const options = {
   enableTime: true,
   time_24hr: true,
@@ -18,11 +23,15 @@ const options = {
   onClose(selectedDates) {
     if (selectedDates && selectedDates.length > 0) {
       userSelectedDate = selectedDates[0];
+      startBtn.disabled = false;
       console.log('Обрана дата:', userSelectedDate);
 
       const currentDate = new Date();
       if (userSelectedDate.getTime() <= currentDate.getTime()) {
-        window.alert('Please choose a date in the future');
+        iziToast.warning({
+          title: 'Caution',
+          message: 'Please choose a date in the future',
+        });
         startBtn.disabled = true;
       } else {
         startBtn.disabled = false;
@@ -42,7 +51,7 @@ startBtn.addEventListener('click', startCount);
 function startCount() {
   startBtn.disabled = true;
 
-  const dateTimePicker = document.querySelector('.flatpickr-input');
+  const dateTimePicker = document.querySelector('input');
   dateTimePicker.disabled = true;
 
   const timerInterval = setInterval(() => {
@@ -59,8 +68,6 @@ function startCount() {
 
     if (timeDifference < 1000) {
       clearInterval(timerInterval);
-      startBtn.disabled = false;
-      dateTimePicker.disabled = false;
     }
     console.log(timeDifference);
   }, 1000);
